@@ -1,0 +1,50 @@
+Step 1:
+==================
+< !-- #include file="aspJSON1.17.asp" -- >
+< %
+' SANI: GET data from URL
+
+jsonstring = "http://rims.punjab.gov.pk/api/databaseupdate/formkey"
+Set oJSON = New aspJSON
+
+'Load JSON string
+oJSON.loadJSON(jsonstring)
+
+'Get single value
+Response.Write oJSON.data("key") 
+
+% >
+
+
+Step 2:
+====================
+< !-- #include file="aspJSON1.17.asp" -- >
+< %
+' SANI: Get data from URL
+
+jsonstring = "http://rims.punjab.gov.pk/api/databaseupdate/formkey"
+Set oJSON = New aspJSON
+
+'Load JSON string
+oJSON.loadJSON(jsonstring)
+
+'Get single value
+'Response.Write oJSON.data("key")
+
+' SANI: POST data to URL
+
+Dim data, httpRequest, postResponse
+
+data = "key=" & oJSON.data("key") 
+data = data & "&data={""pntn"":""123456789"", ""branchcode"":""BR123123123"", ""invoice_number"":""234"", ""invoice_date"":""2016-04-12"", ""invoice_time"":""03:23"", ""discount_percent"":0, ""service_charges_percent"":0, ""tax_percent"":0, ""table_no"":23, ""phone"":""03327399488"", ""customer_name"":""Sani Hyne"", ""total_amount"":360, ""detail"": [{""item_code"":""10012"",""item"":""Salad"", ""unit_price"":234, ""quantity"":2}]}"
+
+Set httpRequest = Server.CreateObject("MSXML2.ServerXMLHTTP")
+httpRequest.Open "POST", "http://rims.punjab.gov.pk/api/databaseupdate/formdata", False
+httpRequest.SetRequestHeader "Content-Type", "application/x-www-form-urlencoded"
+httpRequest.Send data
+
+postResponse = httpRequest.ResponseText
+
+Response.Write postResponse ' or do something else with it
+
+% >
